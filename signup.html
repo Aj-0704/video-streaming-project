@@ -79,6 +79,59 @@ a{
     </form>
     <p>Already have an account? <a href="login.html">Login</a></p>
 </div>
+<script>
+document.querySelector("form").addEventListener("submit", function(e){
+    e.preventDefault();
 
+    let name = document.querySelector("input[type='text']").value;
+    let email = document.querySelector("input[type='email']").value;
+    let password = document.querySelectorAll("input[type='password']")[0].value;
+    let confirmPassword = document.querySelectorAll("input[type='password']")[1].value;
+
+    if(password !== confirmPassword){
+        alert("Passwords do not match!");
+        return;
+    }
+
+    let user = {
+        name: name,
+        email: email,
+        password: password
+    };
+
+    localStorage.setItem("streamxUser", JSON.stringify(user));
+
+    alert("Signup successful! Please login.");
+    window.location.href = "login.html";
+});
+</script>
+<script>
+document.querySelector("form").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if(password !== confirmPassword){
+        alert("Passwords do not match!");
+        return;
+    }
+
+    const user = {
+        name: name,
+        email: email,
+        password: password
+    };
+
+    // Save user permanently
+    localStorage.setItem("streamxUser", JSON.stringify(user));
+
+    alert("Account created successfully!");
+    window.location.href = "login.html";
+});
+</script>
 </body>
+
 </html>
