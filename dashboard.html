@@ -15,7 +15,8 @@
 
 body{
     height:100vh;
-    background: linear-gradient(135deg, #141414, #1f1f1f, #000000);
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
+    url('https://wallpaperaccess.com/full/3988284.jpg') no-repeat center center/cover;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -83,20 +84,15 @@ footer{
 </head>
 <body>
 
-<h1>🎬 StreamX Navigation Hub</h1>
+<h1>🎬 StreamX </h1>
 
-<div class="container"
-    >
+<div class="container">
+
     <div class="card">
     <a href="dashboard.html">🏠 Home</a>
     </div>
-
     <div class="card">
-        <a href="#">🎥 Movies</a>
-    </div>
-
-    <div class="card">
-        <a href="#">📺 TV Shows</a>
+        <a href="#"> 🎬 Movies</a>
     </div>
 
     <div class="card">
@@ -104,20 +100,29 @@ footer{
     </div>
 
     <div class="card">
-        <a href="login.html">🔐 Login</a>
+        <a href="#">📺 TV Shows</a>
     </div>
 
-    <div class="card">
-        <a href="signup.html">📝 Sign Up</a>
-    </div>
+    
 
 </div>
 
 <footer>
 © 2026 StreamX | High-Quality Entertainment Anytime, Anywhere
 </footer>
+<script></script>
+
+</script>
+<button onclick="logout()">Logout</button>
+<script>
+function logout(){
+    localStorage.removeItem("isLoggedIn");
+    alert("Logged out successfully!");
+    window.location.href = "login.html";
+}
+</script>
 
 </body>
+</html
 
-</html>
 
