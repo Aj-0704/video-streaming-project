@@ -77,5 +77,51 @@ a{
     </form>
     <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
 </div>
+    <script>
+document.querySelector("form").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let email = document.querySelector("input[type='email']").value;
+    let password = document.querySelector("input[type='password']").value;
+
+    let storedUser = JSON.parse(localStorage.getItem("streamxUser"));
+
+    if(storedUser && email === storedUser.email && password === storedUser.password){
+        alert("Login successful!");
+        window.location.href = "dashboard.html";
+    } else {
+        alert("Invalid credentials!");
+    }
+});
+</script>
+<script>
+document.querySelector("form").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    const storedUser = JSON.parse(localStorage.getItem("streamxUser"));
+
+    if(!storedUser){
+        alert("No account found. Please sign up first.");
+        return;
+    }
+
+    if(email === storedUser.email && password === storedUser.password){
+
+        // Save login session
+        localStorage.setItem("isLoggedIn", "true");
+
+        alert("Login successful!");
+        window.location.href = "dashboard.html";
+        <a href="dashboard.html"></a>
+    }
+    else{
+        alert("Invalid credentials!");
+    }
+});
+</script>
 </body>
+
 </html>
