@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StreamX Dashboard</title>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
+    url('https://wallpaperaccess.com/full/3988284.jpg') no-repeat center center/cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+h1 {
+    margin-bottom: 10px;
+    font-size: 40px;
+    color: #e50914;
+    letter-spacing: 2px;
+}
+
+.welcome-msg {
+    color: #ccc;
+    font-size: 15px;
+    margin-bottom: 40px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    width: 80%;
+    max-width: 1000px;
+}
+
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 40px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.05);
+    background: #e50914;
+}
+
+.card a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+footer {
+    position: absolute;
+    bottom: 20px;
+    font-size: 14px;
+    color: #aaa;
+}
+
+.logout-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    padding: 12px 25px;
+    background: #e50914;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.logout-btn:hover {
+    background: #b20710;
+    transform: scale(1.1);
+}
+
+@media(max-width: 600px) {
+    h1 { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<h1>🎬 StreamX</h1>
+<p class="welcome-msg" id="welcomeMsg">Welcome back!</p>
+
+<div class="container">
+    <div class="card">
+        <a href="movie.html">🎬 Movies</a>
+    </div>
+    <div class="card">
+        <a href="#">🔥 Web Series</a>
+    </div>
+    <div class="card">
+        <a href="#">📺 TV Shows</a>
+    </div>
+</div>
+
+<footer>© 2026 StreamX | High-Quality Entertainment Anytime, Anywhere</footer>
+
+<button class="logout-btn" onclick="handleLogout()">Logout</button>
+
+<!-- Firebase SDK -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // 🔥 Replace with YOUR Firebase config
+    const firebaseConfig = {
+        apiKey: "AIzaSyC3qtsBs9hdZ4TfkIjdKSDRm0VDlacYL5w",
+        authDomain: "stream-7f1b7.firebaseapp.com",
+        projectId: "stream-7f1b7",
+        storageBucket: "stream-7f1b7.firebasestorage.app",
+        messagingSenderId: "838501338097",
+        appId: "1:838501338097:web:33599d0988a5d97f0bd250",
+        measurementId: "G-G02Z4L21TV"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Auth guard — redirect to login if not authenticated
+    onAuthStateChanged(auth, (user) => {
+        if (!user) {
+            window.location.href = "login.html";
+        } else {
+            const name = user.displayName || user.email;
+            document.getElementById("welcomeMsg").textContent = `Welcome back, ${name}! 👋`;
+        }
+    });
+
+    window.handleLogout = async function () {
+        try {
+            await signOut(auth);
+            window.location.href = "login.html";
+        } catch (error) {
+            alert("Logout failed: " + error.message);
+        }
+    };
+</script>
+
+</body>
+</html>

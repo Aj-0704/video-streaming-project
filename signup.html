@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - StreamX</title>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+    url('https://images.unsplash.com/photo-1517602302552-471fe67acf66') no-repeat center center/cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: rgba(0,0,0,0.85);
+    padding: 40px;
+    border-radius: 10px;
+    width: 350px;
+    color: white;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #e50914;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+    color: #333;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #e50914;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: background 0.3s;
+}
+
+button:hover { background: #b20710; }
+button:disabled { background: #888; cursor: not-allowed; }
+
+p { text-align: center; margin-top: 15px; font-size: 14px; }
+
+a { color: #e50914; text-decoration: none; }
+
+.error-msg {
+    background: rgba(229,9,20,0.15);
+    border: 1px solid #e50914;
+    color: #ff6b6b;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    margin-top: 10px;
+    display: none;
+}
+
+.success-msg {
+    background: rgba(40,167,69,0.15);
+    border: 1px solid #28a745;
+    color: #7fff9a;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 13px;
+    margin-top: 10px;
+    display: none;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h2>Create Account</h2>
+
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email Address" required>
+    <input type="password" id="password" placeholder="Password (min. 6 chars)" required>
+    <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+    <button id="signupBtn" onclick="handleSignup()">Sign Up</button>
+
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="success-msg" id="successMsg"></div>
+
+    <p>Already have an account? <a href="login.html">Login</a></p>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile }
+        from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // 🔥 Replace with YOUR Firebase config
+    const firebaseConfig = {
+        apiKey: "AIzaSyC3qtsBs9hdZ4TfkIjdKSDRm0VDlacYL5w",
+        authDomain: "stream-7f1b7.firebaseapp.com",
+        projectId: "stream-7f1b7",
+        storageBucket: "stream-7f1b7.firebasestorage.app",
+        messagingSenderId: "838501338097",
+        appId: "1:838501338097:web:33599d0988a5d97f0bd250",
+        measurementId: "G-G02Z4L21TV"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    function showError(msg) {
+        const el = document.getElementById("errorMsg");
+        el.textContent = msg;
+        el.style.display = "block";
+        document.getElementById("successMsg").style.display = "none";
+    }
+
+    function showSuccess(msg) {
+        const el = document.getElementById("successMsg");
+        el.textContent = msg;
+        el.style.display = "block";
+        document.getElementById("errorMsg").style.display = "none";
+    }
+
+    window.handleSignup = async function () {
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const btn = document.getElementById("signupBtn");
+
+        if (!name || !email || !password || !confirmPassword) {
+            showError("Please fill in all fields.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            showError("Passwords do not match!");
+            return;
+        }
+
+        if (password.length < 6) {
+            showError("Password must be at least 6 characters.");
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Creating Account...";
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCredential.user, { displayName: name });
+
+            showSuccess("Account created successfully! Redirecting to login...");
+            setTimeout(() => { window.location.href = "login.html"; }, 1500);
+
+        } catch (error) {
+            btn.disabled = false;
+            btn.textContent = "Sign Up";
+
+            switch (error.code) {
+                case "auth/email-already-in-use":
+                    showError("This email is already registered. Please login.");
+                    break;
+                case "auth/invalid-email":
+                    showError("Invalid email address.");
+                    break;
+                case "auth/weak-password":
+                    showError("Password is too weak. Use at least 6 characters.");
+                    break;
+                default:
+                    showError("Signup failed: " + error.message);
+            }
+        }
+    };
+</script>
+
+</body>
+</html>
